@@ -40,8 +40,8 @@ class Consul < Formula
         system "go", "build", "-o", bin/"consul"
       else 
         system "make"
+        bin.install "bin/consul"
       end
-      bin.install "bin/consul"
       prefix.install_metafiles
     end
   end
