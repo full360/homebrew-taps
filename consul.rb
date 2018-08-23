@@ -34,8 +34,13 @@ class Consul < Formula
     (buildpath/"bin").mkpath
 
     cd "src/github.com/hashicorp/consul" do
-      if build.with? "dynamic" then ENV["CGO_ENABLED"] = "1" end
-      system "make"
+      if build.with? "dynamic" 
+      then 
+        ENV["CGO_ENABLED"] = "1" 
+        system "go", "build", "-o", bin/"consul"
+      else 
+        system "make"
+      end
       bin.install "bin/consul"
       prefix.install_metafiles
     end
