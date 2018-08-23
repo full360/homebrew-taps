@@ -21,7 +21,7 @@ class Consul < Formula
   option "with-dynamic", "Build dynamic binary with CGO_ENABLED=1"
   
   def install
-    if build.with? "dynamic" then ENV["CGO_ENABLED"] = "1" end
+    
     # Avoid running `go get`
     inreplace "GNUmakefile", "go get -u -v $(GOTOOLS)", ""
 
@@ -34,6 +34,7 @@ class Consul < Formula
     (buildpath/"bin").mkpath
 
     cd "src/github.com/hashicorp/consul" do
+      if build.with? "dynamic" then ENV["CGO_ENABLED"] = "1" end
       system "make"
       bin.install "bin/consul"
       prefix.install_metafiles
