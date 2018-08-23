@@ -17,8 +17,11 @@ class Consul < Formula
 
   depends_on "go" => :build
   depends_on "gox" => :build
-
+  
+  option "with-dynamic", "Build dynamic binary with CGO_ENABLED=1"
+  
   def install
+    if build.with? "dynamic" then ENV["CGO_ENABLED"] = "1" end
     # Avoid running `go get`
     inreplace "GNUmakefile", "go get -u -v $(GOTOOLS)", ""
 
