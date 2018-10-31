@@ -16,11 +16,13 @@ class Packer < Formula
   depends_on "go" => :build
   depends_on "govendor" => :build
   depends_on "gox" => :build
+  option "with-dynamic", "Build dynamic binary with CGO_ENABLED=1"
 
   def install
     ENV["XC_OS"] = "darwin"
     ENV["XC_ARCH"] = MacOS.prefer_64_bit? ? "amd64" : "386"
     ENV["GOPATH"] = buildpath
+    ENV["CGO_ENABLED"] = "1" if build.with? "dynamic" 
 
     packerpath = buildpath/"src/github.com/hashicorp/packer"
     packerpath.install Dir["{*,.git}"]
