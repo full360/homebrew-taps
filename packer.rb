@@ -22,9 +22,7 @@ class Packer < Formula
     ENV["XC_OS"] = "darwin"
     ENV["XC_ARCH"] = MacOS.prefer_64_bit? ? "amd64" : "386"
     ENV["GOPATH"] = buildpath
-    if build.with? "dynamic" 
-      inreplace "scripts/build.sh", "export CGO_ENABLED=0", "#export CGO_ENABLED=0"
-    end
+
 
     packerpath = buildpath/"src/github.com/hashicorp/packer"
     packerpath.install Dir["{*,.git}"]
