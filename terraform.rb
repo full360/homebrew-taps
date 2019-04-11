@@ -22,6 +22,7 @@ class Terraform < Formula
   def install
     ENV["GOPATH"] = buildpath
     ENV.prepend_create_path "PATH", buildpath/"bin"
+    ENV["CGO_ENABLED"] = "1" if build.with? "dynamic" 
 
     dir = buildpath/"src/github.com/hashicorp/terraform"
     dir.install buildpath.children - [buildpath/".brew_home"]
@@ -33,18 +34,9 @@ class Terraform < Formula
 
       ENV["XC_OS"] = "darwin"
       ENV["XC_ARCH"] = "amd64"
-      if build.with? "dynamic" 
-      then 
-        ENV["CGO_ENABLED"] = "1" 
-        system "go", "build", "-o", bin/"terraform"
-        bin.install "bin/terraform"
-      else 
-        system "make", "tools", "test", "bin"
-        bin.install "pkg/darwin_amd64/terraform"
-      end
-      
-
+      system "make", "tools", "test", "bin"
       bin.install "pkg/darwin_amd64/terraform"
+     
       prefix.install_metafiles
     end
   end
