@@ -16,8 +16,6 @@ class Terraform < Formula
   depends_on "gox" => :build
 
   conflicts_with "tfenv", :because => "tfenv symlinks terraform binaries"
-  
-  option "with-dynamic", "Build dynamic binary with CGO_ENABLED=1"
 
   def install
     ENV["GOPATH"] = buildpath
@@ -35,8 +33,8 @@ class Terraform < Formula
       ENV["XC_OS"] = "darwin"
       ENV["XC_ARCH"] = "amd64"
       system "make", "tools", "test", "bin"
+
       bin.install "pkg/darwin_amd64/terraform"
-     
       prefix.install_metafiles
     end
   end
