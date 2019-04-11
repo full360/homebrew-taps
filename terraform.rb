@@ -22,7 +22,11 @@ class Terraform < Formula
   def install
     ENV["GOPATH"] = buildpath
     ENV.prepend_create_path "PATH", buildpath/"bin"
-    ENV["CGO_ENABLED"] = "1" if build.with? "dynamic" 
+    if build.with? "dynamic" 
+      ENV["CGO_ENABLED"] = "1"
+      inreplace "scripts/build.sh", "export CGO_ENABLED=0", "#export CGO_ENABLED=0"
+    end
+    
 
     dir = buildpath/"src/github.com/hashicorp/terraform"
     dir.install buildpath.children - [buildpath/".brew_home"]
