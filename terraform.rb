@@ -37,8 +37,10 @@ class Terraform < Formula
       then 
         ENV["CGO_ENABLED"] = "1" 
         system "go", "build", "-o", bin/"terraform"
+        bin.install "bin/terraform"
       else 
         system "make", "tools", "test", "bin"
+        bin.install "pkg/darwin_amd64/terraform"
       end
       
 
