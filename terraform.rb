@@ -22,10 +22,7 @@ class Terraform < Formula
   def install
     ENV["GOPATH"] = buildpath
     ENV.prepend_create_path "PATH", buildpath/"bin"
-    if build.with? "dynamic" 
-      ENV["CGO_ENABLED"] = "1"
-      inreplace "scripts/build.sh", "export CGO_ENABLED=0", "#export CGO_ENABLED=0"
-    end
+    
     
 
     dir = buildpath/"src/github.com/hashicorp/terraform"
@@ -38,6 +35,7 @@ class Terraform < Formula
 
       ENV["XC_OS"] = "darwin"
       ENV["XC_ARCH"] = "amd64"
+      ENV["CGO_ENABLED"] = "1" 
       system "make", "tools", "test", "bin"
 
       bin.install "pkg/darwin_amd64/terraform"
