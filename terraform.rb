@@ -36,6 +36,8 @@ class Terraform < Formula
       ENV["XC_OS"] = "darwin"
       ENV["XC_ARCH"] = "amd64"
       ENV["CGO_ENABLED"] = "1" 
+      inreplace "scripts/build.sh", "export CGO_ENABLED=0", "#export CGO_ENABLED=0"
+
       system "make", "tools", "test", "bin"
 
       bin.install "pkg/darwin_amd64/terraform"
