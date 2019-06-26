@@ -2,31 +2,29 @@ class Consul < Formula
   desc "Tool for service discovery, monitoring and configuration"
   homepage "https://www.consul.io"
   url "https://github.com/hashicorp/consul.git",
-      :tag => "v1.2.2",
-      :revision => "e716d1b5f8be252b3e53906c6d5632e0228f30fa"
+      :tag      => "v1.5.1",
+      :revision => "40cec98468b829e5cdaacb0629b3e23a028db688"
   head "https://github.com/hashicorp/consul.git",
        :shallow => false
 
   bottle do
     cellar :any_skip_relocation
-    sha256 "ee7971cb60d017441c8ef6f6eeba4134072dd399b6890e80814ac25018b95e70" => :mojave
-    sha256 "27cc8cea3461a8be43039220c89b8b3e627f6d07d104365dea6e94f34b0ae84b" => :high_sierra
-    sha256 "f0bb8a6258e98bebd61bce7d780283868d9f9d2798e86a89e4ef57fdedfdd584" => :sierra
-    sha256 "29bafd051614ba7a3698ecf9fedbffecd9d448dbb6dc2021de9ec13ab71dd3dc" => :el_capitan
+    sha256 "2643daf7bfd5f8336114eebbf0e962e5c303db85215a7eede8593ebfddf052be" => :mojave
+    sha256 "03def5825488c205398fee07793ee8a42c7298b858aed8ec61b07bdf4834efb5" => :high_sierra
+    sha256 "20a312c05563b319b05aa96c70ff1f841df4d35d84500e459c2b1be8620bebba" => :sierra
   end
 
   depends_on "go" => :build
   depends_on "gox" => :build
-  
+
   option "with-dynamic", "Build dynamic binary with CGO_ENABLED=1"
-  
+
   def install
-    
     # Avoid running `go get`
     inreplace "GNUmakefile", "go get -u -v $(GOTOOLS)", ""
 
     ENV["XC_OS"] = "darwin"
-    ENV["XC_ARCH"] = MacOS.prefer_64_bit? ? "amd64" : "386"
+    ENV["XC_ARCH"] = "amd64"
     ENV["GOPATH"] = buildpath
     contents = Dir["{*,.git,.gitignore}"]
     (buildpath/"src/github.com/hashicorp/consul").install contents
@@ -34,14 +32,14 @@ class Consul < Formula
     (buildpath/"bin").mkpath
 
     cd "src/github.com/hashicorp/consul" do
-      if build.with? "dynamic" 
-      then 
-        ENV["CGO_ENABLED"] = "1" 
+      if build.with? "dynamic"
+      then
+        ENV["CGO_ENABLED"] = "1"
         system "go", "build", "-o", bin/"consul"
-      else 
+      else
         system "make"
-        bin.install "bin/consul"
       end
+      bin.install "bin/consul"
       prefix.install_metafiles
     end
   end
